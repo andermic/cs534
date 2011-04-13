@@ -58,14 +58,15 @@ class Perceptron:
     
         # Train using the perceptron algorithm
         w = self.p_train(canon)
-    
+        print 'w = %s' % str(w)   
+ 
         # Plot the perceptron decision boundary and data points
-        dec_slope = -w[1]/w[2]
-        dec_yint = 3
-    
-        dec_x = [-2, 7]
-        dec_y = [-2 * dec_slope + dec_yint, 7 * dec_slope + dec_yint]
-        
+        XMIN = -2
+        XMAX = 7
+
+        dec_x = [XMIN, XMAX]
+        dec_y = [-(w[0] + XMIN*w[1])/w[2], -(w[0] + XMAX*w[1])/w[2]]
+
         xs_positive = [i[1] for i in canon if i[3] == 1.0]
         ys_positive = [i[2] for i in canon if i[3] == 1.0]
         xs_negative = [i[1] for i in canon if i[3] == -1.0]
@@ -165,6 +166,7 @@ class Voted_Perceptron:
         plot.show()
 
 
+
 class Voted_Perceptron_Avg:
     def vp_train_avg(self, data, epoch):
         w_avg = [0.0, 0.0, 0.0]
@@ -178,17 +180,21 @@ class Voted_Perceptron_Avg:
                 y = data[i][3]
                 u = w[0]*x[0] + w[1]*x[1] + w[2]*x[2]
                 if y * u <= 0:
+                    # Update w_avg summation
                     w_avg[0] += c[n] * w[0]
                     w_avg[1] += c[n] * w[1]
                     w_avg[2] += c[n] * w[2]
+
+                    # Compute next w
                     w[0] += y*x[0]
                     w[1] += y*x[1]
                     w[2] += y*x[2]
+
                     c.append(0)
                     n += 1
                 else:
                     c[n] = c[n] + 1
-        return [i/n for i in w_avg], c
+        return w_avg, c
 
     def vp_classify_avg(self, x, w_avg):
         return sign(w_avg[0]*x[0] + w_avg[1]*x[1] + w_avg[2]*x[2])
@@ -211,14 +217,14 @@ class Voted_Perceptron_Avg:
         c = result[1]
  
         # Plot the voted perceptron w_avg decision boundary and data points
-        dec_slope = -w_avg[1]/w_avg[2]
-        dec_yint = 2.5
+        XMIN = 0
+        XMAX = 7
+
+        dec_x = [XMIN, XMAX]
+        dec_y = [-(w_avg[0] + XMIN*w_avg[1])/w_avg[2], -(w_avg[0] + XMAX*w_avg[1])/w_avg[2]]
     
         print w_avg
 
-        dec_x = [0, 7]
-        dec_y = [0 * dec_slope + dec_yint, 7 * dec_slope + dec_yint]
-        
         xs_positive = [i[1] for i in canon if i[3] == 1.0]
         ys_positive = [i[2] for i in canon if i[3] == 1.0]
         xs_negative = [i[1] for i in canon if i[3] == -1.0]
@@ -234,5 +240,3 @@ class Voted_Perceptron_Avg:
         plot.scatter(xs_negative, ys_negative, label='Negative', color='red')
         plot.legend(loc='upper left') 
         plot.show()
-
-Perceptron()
