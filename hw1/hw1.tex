@@ -194,4 +194,36 @@ $l_r > l_0$ or $l_r > l_1$, we end up with $\theta_0 < 0$ or $\theta_1 > 1$.
 This means that at no point in the interval does the reject option minimize 
 loss, and the problem reduces to one like Exercise 4.
 
+\section{}
+As in the original derivation, since the $w$ part is the only part that is not
+constant with respect to $w$, the gradient is easy to compute:
+
+\[
+\nabla \tilde J = \frac{1}{N} \sum^N_{i=1} z_i \max(0, -y_ix_i)
+\]
+
+\newpage
+
+In the batch algorithm we had for the update to delta on a misclassification:
+
+\vspace{1em}
+
+$delta \leftarrow delta - y_i \cdot x_i$
+
+\vspace{1em}
+
+That line would need to be replaced by the following lines to account for the
+presence of $z_i$:
+
+\vspace{1em}
+
+if $y_i < 0$:\\
+\hspace{2em} $delta \leftarrow delta - c_0 y_i \cdot x_i$\\
+elif $y_i > 0$:\\
+\hspace{2em} $delta \leftarrow delta - c_1 y_i \cdot x_i$\\
+
+\vspace{1em}
+
+Given that $c_0$ and $c_1$ are defined somewhere above in the code.
+
 \end{document}
