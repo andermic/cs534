@@ -240,3 +240,5 @@ class Voted_Perceptron_Avg:
         plot.scatter(xs_negative, ys_negative, label='Negative', color='red')
         plot.legend(loc='upper left') 
         plot.show()
+
+Perceptron()
